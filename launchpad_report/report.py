@@ -16,6 +16,7 @@ from launchpad_report.utils import open_bug_statuses
 from launchpad_report.utils import printn
 from launchpad_report.utils import short_status
 from launchpad_report.utils import untriaged_bug_statuses
+from launchpad_report.utils import work_items
 
 
 class ConfigError(Exception):
@@ -118,6 +119,10 @@ class Report(object):
                 if assignee in self.teams[t]:
                     team = t
             triage = self.checks.run(bp, self.bps_series[get_name(bp)])
+            sh_status = short_status(bp)
+            w_items = work_items(bp)
+            if sh_status in ['done', 'rejected'] and w_items != '':
+                sh_status = 'backport'
             report.append({
                 'type': 'bp',
                 'link': bp.web_link.encode('utf-8'),
@@ -128,11 +133,12 @@ class Report(object):
                 'milestone': milestone,
                 'series': self.bps_series[get_name(bp)],
                 'status': bp.implementation_status,
-                'short_status': short_status(bp),
+                'short_status': sh_status,
                 'priority': bp.priority,
                 'team': team.encode('utf-8'),
                 'assignee': assignee.encode('utf-8'),
                 'name': assignee_name.encode('utf-8'),
+                'work_items': w_items.encode('utf-8'),
                 'triage': ', '.join(triage).encode('utf-8')
             })
         print()
@@ -183,6 +189,10 @@ class Report(object):
                     if task.target != self.project:
                         continue
                 triage += self.checks.run(task, series)
+            sh_status = short_status(bug)
+            w_items = work_items(bug)
+            if sh_status in ['done', 'rejected'] and w_items != '':
+                sh_status = 'backport'
             report.append({
                 'type': 'bug',
                 'link': bug.web_link.encode('utf-8'),
@@ -192,11 +202,12 @@ class Report(object):
                 'title': title.encode('utf-8'),
                 'milestone': milestone,
                 'status': bug.status,
-                'short_status': short_status(bug),
+                'short_status': sh_status,
                 'priority': bug.importance,
                 'team': team.encode('utf-8'),
                 'assignee': assignee.encode('utf-8'),
                 'name': assignee_name.encode('utf-8'),
+                'work_items': w_items.encode('utf-8'),
                 'triage': ', '.join(triage).encode('utf-8'),
             })
         print()

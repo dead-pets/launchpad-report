@@ -106,6 +106,34 @@ def short_status(obj):
     return 'unknown'
 
 
+def get_milestone_name(obj):
+    if obj.milestone is None:
+        return "None"
+    return obj.milestone.name
+
+
+def work_items(obj):
+    if is_bp(obj):
+        tasks = obj.workitems_text.split("\n")[1:]
+        tasks = filter(
+            lambda x: not x.endswith(": DONE"),
+            tasks
+        )
+        return ', '.join(tasks)
+
+    if is_bug(obj):
+        tasks = filter(
+            lambda x: x.status in (open_bug_statuses + untriaged_bug_statuses),
+            obj.bug.bug_tasks
+        )
+        return ', '.join(
+            map(
+                lambda x: ': '.join([get_milestone_name(x), x.status]),
+                tasks
+            )
+        )
+
+
 def get_name(obj):
     key = obj._wadl_resource._url
     if key not in cached_names:
