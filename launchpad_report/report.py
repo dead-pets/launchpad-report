@@ -122,7 +122,7 @@ class Report(object):
             sh_status = short_status(bp)
             w_items = work_items(bp)
             if sh_status in ['done', 'rejected'] and w_items != '':
-                sh_status = 'backport'
+                sh_status = 'unfinished'
             report.append({
                 'type': 'bp',
                 'link': bp.web_link.encode('utf-8'),
@@ -139,6 +139,7 @@ class Report(object):
                 'assignee': assignee.encode('utf-8'),
                 'name': assignee_name.encode('utf-8'),
                 'work_items': w_items.encode('utf-8'),
+                'tags': '',
                 'triage': ', '.join(triage).encode('utf-8')
             })
         print()
@@ -192,7 +193,7 @@ class Report(object):
             sh_status = short_status(bug)
             w_items = work_items(bug)
             if sh_status in ['done', 'rejected'] and w_items != '':
-                sh_status = 'backport'
+                sh_status = 'unfinished'
             report.append({
                 'type': 'bug',
                 'link': bug.web_link.encode('utf-8'),
@@ -208,6 +209,7 @@ class Report(object):
                 'assignee': assignee.encode('utf-8'),
                 'name': assignee_name.encode('utf-8'),
                 'work_items': w_items.encode('utf-8'),
+                'tags': ' '.join(bug.bug.tags),
                 'triage': ', '.join(triage).encode('utf-8'),
             })
         print()

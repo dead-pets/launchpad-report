@@ -53,6 +53,7 @@ a:visited {
 </a></th></tr>
 <tr>
 <th>Title</th>
+<th>Tags</th>
 <th>Milestone</th>
 <th>Status</th>
 <th>Priority</th>
@@ -65,6 +66,7 @@ a:visited {
 {% if item.triage %}
 <tr>
 <td><a href="{{ item.link }}">{{ item.title }}</a></td>
+<td>{{ item.tags }}</td>
 <td>{{ item.milestone }}</td>
 <td>{{ item.status }}</td>
 <td>{{ item.priority }}</td>
@@ -86,6 +88,7 @@ a:visited {
 <tr><th colspan="8"> {{ status_group.grouper }} {{ team_group.grouper }}</th></tr>
 <tr>
 <th>Title</th>
+<th>Tags</th>
 <th>Milestone</th>
 <th>Status</th>
 <th>Priority</th>
@@ -98,6 +101,7 @@ a:visited {
 {% if item.type == "bug" %}
 <tr>
 <td><a href="{{ item.link }}">{{ item.title }}</a></td>
+<td>{{ item.tags }}</td>
 <td>{{ item.milestone }}</td>
 <td>{{ item.status }}</td>
 <td>{{ item.priority }}</td>
