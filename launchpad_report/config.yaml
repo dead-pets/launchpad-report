@@ -4,7 +4,7 @@ trunc_report: 0
 cache_dir: cache
 use_auth: True
 teams:
-  python:
+  dpyzhov:
     fuel-python
     alekseyk-ru
     dshulyak
@@ -17,43 +17,41 @@ teams:
     lux-place
     a-gordeev
     ivankliuk
-  ui:
+  vkramskikh:
     fuel-ui
     vkramskikh
     astepanchuk
     bdudko
     kpimenova
     jkirnosova
-  library:
+  vkuklin:
     fuel-library
-    sgolovatiuk
+    fuel-astute
+    vsharshov
+    a-gordeev
     xenolog
     adidenko
     raytrac3r
     idv1985
-    bogdando
+    dmy-ilyin
     vkuklin
     sbogatkin
     xdeller
     andreika-mail
-    mmaxur
-    maxmazurenka
-  l2:
+  manashkin:
     manashkin
     ekozhemyakin
     akolesnikov
     fsoppelsa
-  astute:
-    fuel-astute
-    vsharshov
-  osci:
+  rvyalov:
     fuel-osci
     sotpuschennikov
     dburmistrov
     vparakhin
     r0mikiam
     mrasskazov
-  qa:
+    dkaiharodsev
+  aurlapova:
     fuel-qa
     apalkina
     aurlapova
@@ -61,31 +59,45 @@ teams:
     asledzinskiy
     apanchenko-8
     ykotko
-  devops:
+    komelchenko
+    ddmitriev
+    dtyzhnenko
+  ishishkin:
     fuel-devops
     afedorova
     teran
     acharykov
-  us:
+    skulanov
+    corepb
+  dborodaenko:
     dborodaenko
     rmoe
     xarses
     dreidellhasa
-  moslinux:
+    docaedo
+    fuel-docs
+  msemenov:
     mos-linux
     apodrepniy
     kdanylov
     msemenov
     asheplyakov
-  mosopenstack:
+    asyriy
+    vlos
+    amogylchenko
+  imarnat:
     mos-neutron
+    mos-keystone
     mos-nova
     mos-horizon
     mos-ceilometer
     mos-oslo
     mos-sahara
     mos-heat
+    mos-cinder
     mos-murano
+    mos-glance
+    degorenko
     iberezovskiy
     e0ne
     dmitrymex
@@ -111,19 +123,40 @@ teams:
     tnurlygayanov
     tsufiev-x
     yorik-sar
-  partners:
+    mmaxur
+    maxmazurenka
+    teselkin-d
+    obondarev
+    akuznetsova
+    i159
+    akurilin
+    pkholkin
+    ekudryashova
+  eshumakher:
+    fuel-partner
+    eshumakher
     izinovik
     gcon-monolake
     igajsin
     moshele
     aviramb
     srogov
-  poland:
+    ekorekin
+    ipovolotskaya
+    azemlyanov
+    nuritv
+  tnapierala:
     tzn
     salmon
     ksambor
     prmtl
     loles
+    sgolovatiuk
+    bogdando
+    smakar
+    omolchanov
+    bpiotrowski
+    pkaminski
   external:
     longgeek
     berendt
@@ -134,3 +167,10 @@ teams:
     vpleshakov
     vdenisov
     nikishov-da
+    atarasov
+    agasanoff
+    slava-val-al
+    gleb-q
+    dukov
+    daniele-pizzolli
+    iwi
