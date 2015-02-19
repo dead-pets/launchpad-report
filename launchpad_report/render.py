@@ -54,14 +54,15 @@ class CSVRenderer(Renderer):
         reporter = UnicodeWriter(csvfile)
         reporter.writerow([
             '', 'Link', 'Title', 'Milestone', 'Short status', 'Status',
-            'Priority', 'Team', 'Nick', 'Name', 'Work items', 'Triage actions'
+            'Priority', 'Tags', 'Team', 'Nick', 'Name', 'Work items',
+            'Triage actions'
         ])
         for row in data['rows']:
             reporter.writerow([
                 row['type'], row['link'], row['title'], row['milestone'],
                 row['short_status'], row['status'], row['priority'],
-                row['team'], row['assignee'], row['name'], row['work_items'],
-                row['triage']
+                row['tags'], row['team'], row['assignee'], row['name'],
+                row['work_items'], row['triage']
             ])
         return csvfile.getvalue()
 
