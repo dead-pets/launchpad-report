@@ -48,7 +48,7 @@ a:visited {
 <table>
 {% for type_group in rows|groupby('type') %}
 {% for status_group in type_group.list|groupby('short_status') %}
-<tr><th colspan="8"><a name="{{ type_group.grouper }}-{{ status_group.grouper }}">
+<tr><th colspan="9"><a name="{{ type_group.grouper }}-{{ status_group.grouper }}">
     {{ status_group.grouper }} {{ type_group.grouper }}s
 </a></th></tr>
 <tr>
@@ -85,7 +85,7 @@ a:visited {
 <table>
 {% for status_group in team_group.list|groupby('short_status') %}
 {% if status_group.grouper in ['open', 'untriaged'] %}
-<tr><th colspan="8"> {{ status_group.grouper }} {{ team_group.grouper }}</th></tr>
+<tr><th colspan="9"> {{ status_group.grouper }} {{ team_group.grouper }}</th></tr>
 <tr>
 <th>Title</th>
 <th>Tags</th>
