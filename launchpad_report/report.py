@@ -130,6 +130,8 @@ class Report(object):
                     bp.web_link.rfind('/') + 1:
                 ].encode('utf-8'),
                 'title': bp.title.encode('utf-8'),
+                'date_created': str(bp.date_created),
+                'date_updated': '',
                 'milestone': milestone,
                 'series': self.bps_series[get_name(bp)],
                 'status': bp.implementation_status,
@@ -201,6 +203,8 @@ class Report(object):
                     bug.web_link.rfind('/') + 1:
                 ].encode('utf-8'),
                 'title': title.encode('utf-8'),
+                'date_created': str(bug.bug.date_created),
+                'date_updated': str(bug.bug.date_last_updated),
                 'milestone': milestone,
                 'status': bug.status,
                 'short_status': sh_status,
