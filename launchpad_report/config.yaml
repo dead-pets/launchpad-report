@@ -18,6 +18,8 @@ teams:
     dpyzhov
     a-gordeev
     ivankliuk
+    vsharshov
+    fuel-astute
     fuel-provisioning
     fuel-build
   vkramskikh:
@@ -29,9 +31,6 @@ teams:
     jkirnosova
   vkuklin:
     fuel-library
-    fuel-astute
-    vsharshov
-    a-gordeev
     xenolog
     adidenko
     raytrac3r
