@@ -40,11 +40,17 @@ teams:
     sbogatkin
     xdeller
     andreika-mail
-  manashkin:
+    omolchanov
+    bpiotrowski
+    sgolovatiuk
+    bogdando
+    smakar
+ manashkin:
     manashkin
     ekozhemyakin
     akolesnikov
     fsoppelsa
+    sovsianikov
   rvyalov:
     fuel-osci
     sotpuschennikov
@@ -53,6 +59,8 @@ teams:
     r0mikiam
     mrasskazov
     dkaiharodsev
+    heos
+    asilenkov
   aurlapova:
     fuel-qa
     apalkina
@@ -64,6 +72,8 @@ teams:
     komelchenko
     ddmitriev
     dtyzhnenko
+    unbelll
+    ishamrai
   ishishkin:
     fuel-devops
     afedorova
@@ -71,13 +81,15 @@ teams:
     acharykov
     skulanov
     corepb
+    mmatuszkowiak
+    ibelikov
   dborodaenko:
     dborodaenko
     rmoe
     xarses
     dreidellhasa
     docaedo
-    fuel-docs
+    dshafer
   msemenov:
     mos-linux
     apodrepniy
@@ -87,6 +99,7 @@ teams:
     asyriy
     vlos
     amogylchenko
+    pboldin
   imarnat:
     mos-neutron
     mos-keystone
@@ -99,6 +112,8 @@ teams:
     mos-cinder
     mos-murano
     mos-glance
+    mos-deployment
+    mos-infra
     degorenko
     iberezovskiy
     e0ne
@@ -134,6 +149,12 @@ teams:
     akurilin
     pkholkin
     ekudryashova
+    akhivin
+    anevenchannyy
+    iudovichenko
+    sgalkin
+    vryzhenkin
+    vsaienko
   eshumakher:
     fuel-partner
     eshumakher
@@ -147,23 +168,29 @@ teams:
     ipovolotskaya
     azemlyanov
     nuritv
+    popovych-andrey
+    vstruk
   tnapierala:
     tzn
     salmon
     ksambor
     prmtl
     loles
-    sgolovatiuk
-    bogdando
-    smakar
-    omolchanov
-    bpiotrowski
     pkaminski
+    maciej-iai
+    romcheg
+    sbrzeczkowski
+  nbogdanov:
+    nikolay-bogdanov
   external:
     longgeek
     berendt
     jesse-pretorius
     sammiestoel
+    afly
+    gilmeir-d
+    mgariepy
+    rherzallah
   other_mirantis:
     zynzel
     vpleshakov
@@ -176,3 +203,10 @@ teams:
     dukov
     daniele-pizzolli
     iwi
+    dtrishkin
+    jvarigina
+    tsipa740
+    swann-w
+  docs:
+    fuel-docs
+    evkonstantinov
