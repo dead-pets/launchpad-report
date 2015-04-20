@@ -172,14 +172,6 @@ teams:
     vstruk
   tnapierala:
     tzn
-    salmon
-    ksambor
-    prmtl
-    loles
-    pkaminski
-    maciej-iai
-    romcheg
-    sbrzeczkowski
   nbogdanov:
     nikolay-bogdanov
   external:
@@ -210,3 +202,12 @@ teams:
   docs:
     fuel-docs
     evkonstantinov
+  loles:
+    salmon
+    maciej-iai
+    sbrzeczkowski
+    ksambor
+    prmtl
+    pkaminski
+    romcheg
+    loles
