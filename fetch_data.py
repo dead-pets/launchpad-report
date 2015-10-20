@@ -12,7 +12,28 @@ prj = lp.projects['fuel']
 dev_focus = prj.development_focus
 cur_ms = prj.getMilestone(name='8.0')
 
-open_statuses = ['New', 'Confirmed', 'Triaged', 'In Progress']
+# open_statuses = ['New', 'Confirmed', 'Triaged', 'In Progress']
+
+untriaged_bug_statuses = [
+    'New',
+]
+
+open_bug_statuses = [
+    'Incomplete', 'Confirmed', 'Triaged', 'In Progress',
+    'Incomplete (with response)', 'Incomplete (without response)',
+]
+
+rejected_bug_statuses = [
+    'Opinion', 'Invalid', 'Won\'t Fix', 'Expired',
+]
+
+closed_bug_statuses = [
+    'Fix Committed', 'Fix Released',
+] + rejected_bug_statuses
+
+all_bug_statuses = (
+    untriaged_bug_statuses + open_bug_statuses + closed_bug_statuses
+)
 
 area_tags = ['library', 'ui', 'fuel-python', 'system-tests', 'docs', 'devops', 'fuel-ci', 'fuel-build']
 
@@ -65,7 +86,7 @@ def collect_bug(bug):
                 dfx.loc[id][ms + f] = getattr(bt, f).name
 
 # Download all open bugs
-collection = prj.searchTasks(milestone=cur_ms, status=open_statuses)
+collection = prj.searchTasks(milestone=cur_ms, status=all_bug_statuses)
 
 df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
 ms_df = {}
