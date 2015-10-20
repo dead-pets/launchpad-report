@@ -54,7 +54,8 @@ bt_date_fields = ['date_assigned', 'date_closed', 'date_confirmed', 'date_create
 
 def collect_bug(bug):
     id = bug.id
-    df.loc[id] = float('nan')
+    if not (id in df.index):
+        df.loc[id] = float('nan')
     for f in text_fields:
         df.loc[id][f] = getattr(bug, f)
     for f in date_fields:
@@ -85,11 +86,28 @@ def collect_bug(bug):
             else:
                 dfx.loc[id][ms + f] = getattr(bt, f).name
 
-# Download all open bugs
+# Download master bugs
 collection = prj.searchTasks(milestone=cur_ms, status=all_bug_statuses)
 
 df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
 ms_df = {}
+
+s = len(collection)
+i = 0
+for bt in collection:
+    i += 1
+    print "%d/%d %s" % (i, s, bt.bug.id)
+    collect_bug(bt.bug)
+
+df = pd.concat([df] + ms_df.values(), axis=1)
+
+print "Found %s bugs" % len(collection)
+
+# Download 8.0.x bugs
+collection = dev_focus.searchTasks(milestone=cur_ms, status=all_bug_statuses)
+
+# df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
+# ms_df = {}
 
 s = len(collection)
 i = 0
