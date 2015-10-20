@@ -99,7 +99,7 @@ for bt in collection:
     print "%d/%d %s" % (i, s, bt.bug.id)
     collect_bug(bt.bug)
 
-df = pd.concat([df] + ms_df.values(), axis=1)
+#df = pd.concat([df] + ms_df.values(), axis=1)
 
 print "Found %s bugs" % len(collection)
 
