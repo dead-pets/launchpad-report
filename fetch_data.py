@@ -7,12 +7,7 @@ import sys
 from launchpadlib.launchpad import Launchpad
 
 lp = Launchpad.login_with('lp-report-bot', 'production', version='devel')
-prj = lp.projects['fuel']
-
-dev_focus = prj.development_focus
-cur_ms = prj.getMilestone(name='8.0')
-
-# open_statuses = ['New', 'Confirmed', 'Triaged', 'In Progress']
+projects = ['fuel', 'mos', 'summary-reports', 'fuel-plugins']
 
 untriaged_bug_statuses = [
     'New',
@@ -35,8 +30,6 @@ all_bug_statuses = (
     untriaged_bug_statuses + open_bug_statuses + closed_bug_statuses
 )
 
-area_tags = ['library', 'ui', 'fuel-python', 'system-tests', 'docs', 'devops', 'fuel-ci', 'fuel-build']
-
 text_fields = [
     'title', 'heat', 'message_count', 'tags', 'private', 'security_related',
     'users_affected_count', 'number_of_duplicates',
@@ -51,6 +44,11 @@ bt_person_fields = ['assignee'] #, 'owner']
 bt_date_fields = ['date_assigned', 'date_closed', 'date_confirmed', 'date_created', 'date_fix_committed',
     'date_fix_released', 'date_in_progress', 'date_incomplete', 'date_left_closed', 'date_left_new',
     'date_triaged']
+
+df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
+ms_df = {}
+
+team_filters = ['fuel', 'mos']
 
 def collect_bug(bug):
     id = bug.id
@@ -68,136 +66,81 @@ def collect_bug(bug):
     for f in collection_size_fields:
         df.loc[id][f + '_size'] = len(getattr(bug, f))
     for bt in bug.bug_tasks:
+        prj_name = 'unknown_project'
+        if bt.target.resource_type_link.endswith('#project_series'):
+            prj_name = bt.target.project.name
+        if bt.target.resource_type_link.endswith('#project'):
+            prj_name = bt.target.name
         if bt.milestone is None:
-            ms = 'Untargeted_'
+            ms_name = 'no_milestone'
         else:
-            ms = bt.milestone.name + '_'
+            ms_name = bt.milestone.name + '_'
+        col_prefix = '%s_%s_' % (prj_name, ms_name)
         try:
-            dfx = ms_df[ms]
+            dfx = ms_df[col_prefix]
         except KeyError:
-            dfx = pd.DataFrame(columns=map(lambda x: ms + x, bt_text_fields + bt_person_fields))
-            ms_df[ms] = dfx
+            dfx = pd.DataFrame(columns=map(lambda x: col_prefix + x, bt_text_fields + bt_person_fields))
+            ms_df[col_prefix] = dfx
         dfx.loc[id] = float('nan')
         for f in bt_text_fields:
-            dfx.loc[id][ms + f] = getattr(bt, f)
+            dfx.loc[id][col_prefix + f] = getattr(bt, f)
         for f in bt_person_fields:
             if getattr(bt, f) is None:
-                dfx.loc[id][ms + f] = None
+                dfx.loc[id][col_prefix + f] = None
             else:
-                dfx.loc[id][ms + f] = getattr(bt, f).name
-
-# Download master bugs
-collection = prj.searchTasks(milestone=cur_ms, status=all_bug_statuses)
-
-df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
-ms_df = {}
-
-s = len(collection)
-i = 0
-for bt in collection:
-    i += 1
-    print "%d/%d %s" % (i, s, bt.bug.id)
-    collect_bug(bt.bug)
-
-#df = pd.concat([df] + ms_df.values(), axis=1)
-
-print "Found %s bugs" % len(collection)
-
-# Download 8.0.x bugs
-collection = dev_focus.searchTasks(milestone=cur_ms, status=all_bug_statuses)
-
-# df = pd.DataFrame(columns=text_fields + person_fields + date_fields + map(lambda x: x + '_size', collection_size_fields))
-# ms_df = {}
-
-s = len(collection)
-i = 0
-for bt in collection:
-    i += 1
-    print "%d/%d %s" % (i, s, bt.bug.id)
-    collect_bug(bt.bug)
-
-df = pd.concat([df] + ms_df.values(), axis=1)
-
-print "Found %s bugs" % len(collection)
+                dfx.loc[id][col_prefix + f] = getattr(bt, f).name
 
 
-#df[['owner', 'title', '8.0_status', 'tags', '8.0_importance', '8.0_assignee']]
 
-# teams taken from here: https://review.fuel-infra.org/gitweb?p=tools/lp-reports.git;a=blob_plain;f=config/teams.yaml;hb=refs/heads/master
-teams = """
-mos-ceilometer
-mos-cinder
-mos-glance
-mos-heat
-mos-horizon
-mos-ironic
-mos-keystone
-mos-kernel-virt
-mos-kernel-networking
-mos-kernel-storage
-mos-murano
-mos-neutron
-mos-nova
-mos-oslo
-mos-packaging
-mos-puppet
-mos-sahara
-mos-scale
-mos-swift
-fuel-python
-fuel-ui
-fuel-library
-mos-maintenance
-mos-linux
-mos-ceph
-fuel-plugin-calico
-fuel-plugin-cisco-aci
-fuel-plugin-external-glusterfs
-fuel-plugin-cinder-netapp
-fuel-plugin-zabbix
-fuel-plugins-bugs
-fuel-plugins-docs
-mos-lma-toolchain
-fuel-partner-engineering
-fuel-plugin-contrail
-fuel-plugin-vmware-dvs
-fuel-docs
-fuel-build
-fuel-ci
-fuel-devops
-fuel-qa
-mos-qa
-mos-security
-fuel-security
-""".split()
 
-cols_with_people = filter(lambda x: x.count('assignee'), df.columns) + ['owner']
-for id in pd.Series(df[cols_with_people].values.ravel()).unique():
-    try:
-        if lp.people[id].is_team:
-            if not id in teams:
-                teams += [id]
-                print id
-    except:
-        print "E: %s" % id
+if __name__ == "__main__":
+    for prj_name in projects:
+        prj = lp.projects[prj_name]
 
-teams_map = {}
-for t in teams:
-    for p in lp.people[t].members:
-        try:
-            teams_map[t] += [p.name]
-        except KeyError:
-            teams_map[t] = [p.name]
+        # Download bugs
+        collection = prj.searchTasks(status=all_bug_statuses)
+        s = len(collection)
+        i = 0
+        for bt in collection:
+            i += 1
+            print "%s: %d/%d %s" % (prj_name, i, s, bt.bug.id)
+            collect_bug(bt.bug)
 
-df_teams = pd.DataFrame(columns=teams_map.keys())
+        print "Found %s bugs" % len(collection)
 
-for t in teams_map.keys():
-    for p in teams_map[t]:
-        try:
-            df_teams.loc[p][t] = t
-        except KeyError:
-            df_teams.loc[p] = float('nan')
-            df_teams.loc[p][t] = t
+        df = pd.concat([df] + ms_df.values(), axis=1)
 
-df.to_csv('artifacts/open_fuel_8_0-%s.csv' % sys.argv[1], encoding='utf-8')
-df_teams.to_csv('artifacts/teams_fuel-%s.csv' % sys.argv[1], encoding='utf-8')
+        df.to_csv('artifacts/bugs-%s.csv' % sys.argv[1], encoding='utf-8')
+
+        teams_map = {}
+        cols_with_people = filter(lambda x: x.count('assignee'), df.columns) + ['owner']
+        for id in pd.Series(df[cols_with_people].values.ravel()).unique():
+            try:
+                if lp.people[id].is_team:
+                    if not id in teams_map:
+                        teams_map[id] = []
+            except:
+                print "E: %s" % id
+
+        for team_filter in team_filters:
+            for team in lp.people.findTeam(text=team_filter):
+                teams_map[team] = []
+
+        for t in teams_map:
+            for p in lp.people[t].members:
+                try:
+                    teams_map[t] += [p.name]
+                except:
+                    teams_map[t] = [p.name]
+
+        df_teams = pd.DataFrame(columns=teams_map.keys())
+
+        for t in teams_map.keys():
+            for p in teams_map[t]:
+                try:
+                    df_teams.loc[p][t] = t
+                except KeyError:
+                    df_teams.loc[p] = float('nan')
+                    df_teams.loc[p][t] = t
+
+        df_teams.to_csv('artifacts/teams-%s.csv' % sys.argv[1], encoding='utf-8')
