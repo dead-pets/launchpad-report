@@ -97,34 +97,40 @@ if __name__ == "__main__":
     for prj_name in projects:
         prj = lp.projects[prj_name]
 
+        skip_bugs = False
+
         # Download bugs
-        collection = prj.searchTasks(status=all_bug_statuses)
-        s = len(collection)
-        i = 0
-        for bt in collection:
-            i += 1
-            print "%s: %d/%d %s" % (prj_name, i, s, bt.bug.id)
-            collect_bug(bt.bug)
+        if not skip_bugs:
+            collection = prj.searchTasks(status=all_bug_statuses)
+            s = len(collection)
+            i = 0
+            for bt in collection:
+                i += 1
+                print "%s: %d/%d %s" % (prj_name, i, s, bt.bug.id)
+                collect_bug(bt.bug)
 
-        print "Found %s bugs" % len(collection)
+            print "Found %s bugs" % len(collection)
 
-        df = pd.concat([df] + ms_df.values(), axis=1)
+            df = pd.concat([df] + ms_df.values(), axis=1)
 
-        df.to_csv('artifacts/bugs-%s.csv' % sys.argv[1], encoding='utf-8')
+            df.to_csv('artifacts/bugs-%s.csv' % sys.argv[1], encoding='utf-8')
 
         teams_map = {}
-        cols_with_people = filter(lambda x: x.count('assignee'), df.columns) + ['owner']
-        for id in pd.Series(df[cols_with_people].values.ravel()).unique():
-            try:
-                if lp.people[id].is_team:
-                    if not id in teams_map:
-                        teams_map[id] = []
-            except:
-                print "E: %s" % id
+
+        if not skip_bugs:
+            cols_with_people = filter(lambda x: x.count('assignee'), df.columns) + ['owner']
+
+            for id in pd.Series(df[cols_with_people].values.ravel()).unique():
+                try:
+                    if lp.people[id].is_team:
+                        if not id in teams_map:
+                            teams_map[id] = []
+                except:
+                    print "E: %s" % id
 
         for team_filter in team_filters:
             for team in lp.people.findTeam(text=team_filter):
-                teams_map[team] = []
+                teams_map[team.name] = []
 
         for t in teams_map:
             for p in lp.people[t].members:
