@@ -74,7 +74,7 @@ def collect_bug(bug):
         if bt.milestone is None:
             ms_name = 'no_milestone'
         else:
-            ms_name = bt.milestone.name + '_'
+            ms_name = bt.milestone.name
         col_prefix = '%s_%s_' % (prj_name, ms_name)
         try:
             dfx = ms_df[col_prefix]
